@@ -1,6 +1,7 @@
 package com.example.lancer.poptiles;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,13 @@ import android.widget.TextView;
 public class Adapter extends BaseAdapter {
     private  LayoutInflater inflater;
     Context con;
-    int[] m;
-
+    boolean[] m;
+    final Handler mHandler = new Handler();
     public Adapter(Context c) {
         con = c;
     }
 
-    public Adapter(int[] x , Context c) {
+    public Adapter(boolean[] x , Context c) {
         m = x;
         con=c;
         inflater = (LayoutInflater) con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,7 +48,8 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        TextView textview ;
+        final TextView textview ;
+        final int pos=position;
         if(convertView ==  null){
 
             convertView=  inflater.inflate(R.layout.list_item,null);
@@ -55,9 +57,44 @@ public class Adapter extends BaseAdapter {
 
         }
         textview = (TextView )convertView.findViewById(R.id.text1);
+        if(m[pos]==true) {
+            textview.setText("1");
+        }else {
+            textview.setText("");
+        }
 
-        textview.setText(m[position]+"");
+       /* new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                textview.setText(m[pos] + "");
+
+            }
+        }, 5000);*/
+
+
+
+       /* mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(2000);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+
+
         return convertView;
     }
 
+    public void changeData(int nxt ) {
+
+        m[nxt]=true;
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
+    }
 }
