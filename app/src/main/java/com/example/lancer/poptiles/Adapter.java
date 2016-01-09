@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by poonam on 05/01/16.
@@ -57,10 +58,27 @@ public class Adapter extends BaseAdapter {
 
         }
         textview = (TextView )convertView.findViewById(R.id.text1);
-        if(m[pos]==true) {
-            textview.setText("1");
-        }else {
-            textview.setText("");
+        if(!isgameOver(m)) {
+            if (m[pos] == true) {
+                textview.setText("1");
+            } else {
+                textview.setText("");
+            }
+            textview.setTag(pos);
+            if (textview.getText().equals("1")) {
+                textview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        textview.setText("");
+                        int i = (int) textview.getTag();
+
+                    }
+                });
+            } else {
+                textview.setOnClickListener(null);
+            }
+        }else{
+            Toast.makeText(con,"game is over",Toast.LENGTH_LONG).show();
         }
 
        /* new Handler().postDelayed(new Runnable() {
@@ -89,6 +107,17 @@ public class Adapter extends BaseAdapter {
 
 
         return convertView;
+    }
+
+    private boolean isgameOver(boolean[] m) {
+        int i;
+        for(i=0;i<m.length;i++){
+
+            if(m[i]== false){
+                return false;
+            }
+        }
+        return  true;
     }
 
     public void changeData(int nxt ) {
